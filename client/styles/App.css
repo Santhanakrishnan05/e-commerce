@@ -1,0 +1,108 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.App{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(237, 235, 238);
+    box-shadow: 1px 1px 4px 4px rgb(113, 110, 110);
+}
+
+
+/* NavBar for Web Style */
+.navBar{
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 50px;
+    background-color: rgb(7, 210, 149);
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    box-shadow: 1px 1px 3px 2px rgb(129, 126, 126);
+}
+.navBar .list{
+    text-decoration: none;
+    padding: 15px;
+    color: rgb(0, 0, 7);
+    transition: .2s;
+}
+.navBar .list:hover{
+    color: rgb(24, 76, 233);
+}
+.AuthNav{
+  display: none;
+}
+/* Mobile Icon */
+.navBarMobileIcon {
+  display: none;
+  border: none;
+  font-size: 25px;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-color: rgb(7, 210, 149);
+  transition: 0.2s;
+  cursor: pointer;
+}
+.navBarMobileIcon:hover {
+  background-color: rgb(7, 84, 61);
+}
+
+.navBarMobile {
+  display: flex;
+  flex-direction: column; 
+  position: absolute;
+  top: 35px; 
+  right: 35px;
+  background-color: #333434;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  width: 180px;
+  z-index: 100;
+}
+
+.navBarMobile .list {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  margin: 2px 0;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.navBarMobile .list:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+
+@media (max-width: 660px) {
+    .navBar{
+        justify-content: end;
+    }
+    .AuthNav{
+        display: block;
+    }
+    .navBarWeb{
+        display: none;
+    }
+    .navBarMobile{
+        display: block;
+    }
+    .navBarMobileIcon{
+        display: block;
+    }
+
+}
