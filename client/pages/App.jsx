@@ -27,7 +27,7 @@ import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/CartContext'
 
 // Configure axios defaults
-axios.defaults.baseURL = 'http://localhost:4000/api';
+axios.defaults.baseURL = 'http://localhost:8080';
 
 function App() {
   const [products, setProducts] = useState([])

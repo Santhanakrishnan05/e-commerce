@@ -17,7 +17,7 @@ export default function OrderManager(props) {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/orders')
+      const response = await axios.get('http://localhost:8080/orders')
       setOrderAdmin(response.data || [])
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -31,7 +31,7 @@ export default function OrderManager(props) {
     try {
       const ok = window.confirm('Are you sure you want to delete this order?')
       if (!ok) return
-      await axios.delete(`http://localhost:4000/api/orders/${orderId}`)
+      await axios.delete(`http://localhost:8080/orders/${orderId}`)
       fetchOrders()
     } catch (error) {
       console.error('Failed to delete order:', error)
@@ -41,7 +41,7 @@ export default function OrderManager(props) {
 
   const fetchCustomRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/orders/custom-requests')
+      const response = await axios.get('http://localhost:8080/orders/custom-requests')
       setOrderRequestAdmin(response.data || [])
     } catch (error) {
       console.error('Error fetching custom requests:', error)
@@ -50,7 +50,7 @@ export default function OrderManager(props) {
   }
 
   const handleSetRequest = async (item) => {
-    const raw = amountById[item._id] ?? ''
+    const raw = amountById[item.id] ?? ''
     const numericAmount = Number(raw)
     if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
       alert('Please enter a valid amount (> 0)')
@@ -60,9 +60,9 @@ export default function OrderManager(props) {
     try {
       // Send only the fields that are meant to be updated
       const update = { estimatedCost: numericAmount, status: 'approved' }
-      await axios.put(`http://localhost:4000/api/orders/custom-requests/${item._id}`, update)
+      await axios.put(`http://localhost:8080/orders/custom-requests/${item.id}`, update)
       // Clear only this row's amount input
-      setAmountById(prev => ({ ...prev, [item._id]: '' }))
+      setAmountById(prev => ({ ...prev, [item.id]: '' }))
       // Refresh the data
       fetchCustomRequests()
     } catch (err) {
@@ -77,7 +77,7 @@ export default function OrderManager(props) {
   useEffect(() => {
     if (Array.isArray(orderAdmin)) {
       const statusMap = Object.fromEntries(
-        orderAdmin.map(item => [item._id || item.id, item.status || 'pending'])
+        orderAdmin.map(item => [item.id, item.status || 'pending'])
       )
       setReqStatus(statusMap)
     }
@@ -85,9 +85,9 @@ export default function OrderManager(props) {
 
   const handleChangeStatus = async (newStatus, item) => {
     try {
-      setReqStatus(prev => ({ ...prev, [item._id || item.id]: newStatus }))
+      setReqStatus(prev => ({ ...prev, [item.id]: newStatus }))
       const updateStatus = { status: newStatus }
-      await axios.put(`http://localhost:4000/api/orders/${item._id || item.id}`, updateStatus)
+      await axios.put(`http://localhost:8080/orders/${item.id}`, updateStatus)
       fetchOrders() // Refresh the data
     } catch (err) {
       console.log(err)
@@ -108,13 +108,13 @@ export default function OrderManager(props) {
       <div className='custom-design-admin'>
         {Array.isArray(orderRequestAdmin) && orderRequestAdmin.length > 0 ? (
           orderRequestAdmin.map(item => {
-            const inputAmount = amountById[item._id] ?? ''
+            const inputAmount = amountById[item.id] ?? ''
             return (
-              <div className="cart-card-admin" key={item._id || item.id}>
+              <div className="cart-card-admin" key={item.id}>
                 <h3 className="cart-title-admin">Order Status {item.status}</h3>
                 <div className="cart-details-admin">
-                  <p><strong>User Id:</strong> {item.userID || item.userId}</p>
-                  <p><strong>User name:</strong> {item.username}</p>
+                  <p><strong>User Id:</strong> {item.userId}</p>
+                  <p><strong>User name:</strong> {item.userName}</p>
                   <p><strong>User email:</strong> {item.email}</p>
                   <p><strong>User Address:</strong> {item.address}</p>
                   <p><strong>Cloth Type:</strong> {item.clothType}</p>
@@ -123,20 +123,18 @@ export default function OrderManager(props) {
                   <p><strong>Quantity:</strong> {item.quantity}</p>
                   <p><strong>Amount:</strong> {item.estimatedCost }</p>
                   <p><strong>Design:</strong> {item.image ? (
-                    <a href={`http://localhost:4000/uploads/${item.image}`} target="_blank" rel="noreferrer">View Design</a>
-                  ) : item.designLink ? (
-                    <a href={item.designLink} target="_blank" rel="noreferrer">View Design</a>
-                  ) : (
+                    <a href={`http://localhost:8080/uploads/${item.image}`} target="_blank" rel="noreferrer">View Design</a>
+                  ): (
                     "No design"
                   )}</p>
                   {item.status !== 'approved' && (
                     <div style={{margin: '10px 0'}}>
-                      <label htmlFor={`amount-${item._id}`}><strong>Set Amount:</strong></label>
+                      <label htmlFor={`amount-${item.id}`}><strong>Set Amount:</strong></label>
                       <input
-                        id={`amount-${item._id}`}
+                        id={`amount-${item.id}`}
                         type="number"
                         value={inputAmount}
-                        onChange={(e) => setAmountById(prev => ({ ...prev, [item._id]: e.target.value }))}
+                        onChange={(e) => setAmountById(prev => ({ ...prev, [item.id]: e.target.value }))}
                         placeholder="Enter estimated cost"
                         min="0"
                         step="0.01"
@@ -164,12 +162,12 @@ export default function OrderManager(props) {
         {Array.isArray(orderAdmin) && orderAdmin.length > 0 ? (
           orderAdmin.map(item => {
             return (
-              <div className="cart-card-admin1" key={item._id || item.id}>
+              <div className="cart-card-admin1" key={item.id}>
                 <h3 className="cart-title-admin">Order Status {item.status}</h3>
                 <div className="cart-details-admin">
                   <p><strong>Order Type</strong> {item.type}</p>
                   <p><strong>User ID</strong> {item.userId}</p>
-                  <p><strong>User Name:</strong> {item.username}</p>
+                  <p><strong>User Name:</strong> {item.userName}</p>
                   <p><strong>User Email:</strong> {item.email}</p>
                   <p><strong>User Adderss:</strong> {item.address}</p>
 
@@ -179,8 +177,8 @@ export default function OrderManager(props) {
                   <p><strong>Quantity:</strong> {item.quantity}</p>
                   <p><strong>Size:</strong> {item.size}</p>
                   <p><strong>Color:</strong> {item.color}</p>
-                  <p><strong>Design:</strong> {item.image ? (
-                    <a href={`http://localhost:4000/uploads/${item.image}`} target="_blank" rel="noreferrer">View Design</a>
+                  <p><strong>Design:</strong> {item.design ? (
+                    <a href={`http://localhost:8080/uploads/${item.design}`} target="_blank" rel="noreferrer">View Design</a>
                   ) : item.designLink ? (
                     <a href={item.designLink} target="_blank" rel="noreferrer">View Design</a>
                   ) : (

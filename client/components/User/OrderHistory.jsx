@@ -6,6 +6,8 @@ export default function OrderHistory() {
   const { user } = useAuth()
   const [orderRequest, setOrderRequest] = useState([])
   const [orderProduct, setOrderProduct] = useState([])
+  const [placedCustomOrders, setPlacedCustomOrders] = useState([])
+
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -34,13 +36,13 @@ export default function OrderHistory() {
       }
       
       // Fetch custom design requests for current user
-      const customResponse = await axios.get(`http://localhost:4000/api/orders/custom-requests/user/${user._id || user.userId}`, {
+      const customResponse = await axios.get(`http://localhost:8080/orders/custom-requests/user/${ user.userId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       })
       setOrderRequest(customResponse.data || [])
 
       // Fetch regular orders for current user
-      const ordersResponse = await axios.get(`http://localhost:4000/api/orders/user/${user._id || user.userId}`, {
+      const ordersResponse = await axios.get(`http://localhost:8080/orders/user/${user.userId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       })
       setOrderProduct(ordersResponse.data || [])
@@ -71,30 +73,31 @@ export default function OrderHistory() {
 
       // Create order data from custom request
       const orderData = {
-        productId: `CUSTOM_${item._id}`, // Custom ID for custom requests
-        userId: user._id || user.userId,
-        username: user.username,
+        customRequestId: item.id,
+        userId: user.userId,
+        userName: user.userName,
         email: user.email,
         address: user.address || 'Not provided',
+        image : item.image,
         clothType: item.clothType,
         color: item.color,
         size: item.size,
         quantity: item.quantity,
-        designLink: item.designLink,
         amount: item.estimatedCost, // Use estimatedCost from custom request
         paymentId: `PAY_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        type: 'customize',
+        type: 'customized',
         status: 'pending',
         payment: 'paid'
       };
 
       console.log('Creating order with data:', orderData);
 
-      const response = await axios.post('http://localhost:4000/api/orders', orderData, {
+      const response = await axios.post('http://localhost:8080/orders', orderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
 
       if (response.data.message === 'Order created successfully') {
+        setPlacedCustomOrders(prev => [...prev, item.id]);
         alert('Order placed successfully! Your custom design is now in production.');
         // Refresh the orders to show the new order
         fetchOrders();
@@ -137,13 +140,18 @@ export default function OrderHistory() {
       <div className='custom-design'>
         {Array.isArray(orderRequest) && orderRequest.length > 0 ? (
           orderRequest.map(item => {
-            const isStatus = item.status === "approved"
-            // Check if an order has already been placed for this custom request
-            const hasOrderPlaced = orderProduct.some(order => 
-              order.productId === `CUSTOM_${item._id}` && order.type === 'customize'
-            )
+            const isStatus = item.status === "approved";
+
+            const hasOrderPlaced =
+            placedCustomOrders.includes(item.id) ||
+            orderProduct.some(order =>
+              order.customRequestId === item.id &&
+              order.type === 'customized'
+            );
+
+            const disableButton = !isStatus || hasOrderPlaced;
             return (
-              <div className="cart-card" key={item._id || item.id}>
+              <div className="cart-card" key={item.id}>
                 <h3 className="cart-title">Order Status {item.status}</h3>
                 <div className="cart-details">
                   <p><strong>Cloth Type:</strong> {item.clothType}</p>
@@ -153,16 +161,14 @@ export default function OrderHistory() {
                   <p><strong>Amount:</strong> {item.estimatedCost || 'Not set'}</p>
                   <p><strong>Type:</strong> {item.type}</p>
                   <p><strong>Design:</strong> {item.image ? (
-                    <a href={`http://localhost:4000/uploads/${item.image}`} target="_blank" rel="noreferrer">View Design</a>
-                  ) : item.designLink ? (
-                    <a href={item.designLink} target="_blank" rel="noreferrer">View Design</a>
+                    <a href={`http://localhost:8080/uploads/${item.image}`} target="_blank" rel="noreferrer">View Design</a>
                   ) : (
                     "No design"
                   )}</p>
                   {item.adminNotes && <p><strong>Admin Notes:</strong> {item.adminNotes}</p>}
                   {item.estimatedTime && <p><strong>Estimated Time:</strong> {item.estimatedTime}</p>}
                   <button 
-                    disabled={!isStatus || hasOrderPlaced} 
+                    disabled={disableButton} 
                     onClick={() => handleTransferProduct(item)} 
                     className='custom-order-btn'
                   >
@@ -181,7 +187,7 @@ export default function OrderHistory() {
       <div className='custom-design'>
         {Array.isArray(orderProduct) && orderProduct.length > 0 ? (
           orderProduct.map(item => (
-            <div className="cart-card" key={item._id || item.id}>
+            <div className="cart-card" key={item.id}>
               <h3 className="cart-title">Order Status {item.status}</h3>
               <div className="cart-details">
                 <p><strong>Cloth Type:</strong> {item.clothType}</p>
@@ -191,9 +197,7 @@ export default function OrderHistory() {
                 <p><strong>Amount:</strong> {item.amount}</p>
                 <p><strong>Type:</strong> {item.type}</p>
                 <p><strong>Design:</strong> {item.image ? (
-                  <a href={`http://localhost:4000/uploads/${item.image}`} target="_blank" rel="noreferrer">View Design</a>
-                ) : item.designLink ? (
-                  <a href={item.designLink} target="_blank" rel="noreferrer">View Design</a>
+                  <a href={`http://localhost:8080/uploads/${item.image}`} target="_blank" rel="noreferrer">View Design</a>
                 ) : (
                   "No design"
                 )}</p>

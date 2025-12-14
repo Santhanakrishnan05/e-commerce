@@ -9,8 +9,8 @@ export default function Favourites() {
   const { products } = useAuth()
 
     const handleFavTaggle = (item) => {
-      const productId = item._id || item.id
-      const isFav = fav.some(item => (item._id || item.id) === productId)
+      const productId = item.id
+      const isFav = fav.some(item => (item.id) === productId)
       if (isFav) {
         // Remove from favorites
         removeFromFavorites(productId)
@@ -28,8 +28,8 @@ export default function Favourites() {
   const safeProducts = products || []
 
   const productsInFav = safeProducts.filter(product => {
-    const productId = product._id || product.id
-    return fav.some(item => (item._id || item.id) === productId)
+    const productId = product.id
+    return fav.some(item => (item.id) === productId)
   })
 
   if (fav.length === 0) {
@@ -45,11 +45,11 @@ export default function Favourites() {
     <div className='cart-page1'>
       <h2>🛍️ Your Favourites</h2>
       {productsInFav.map((item) => {
-        const productId = item._id || item.id
+        const productId = item.id
         return (
           <div key={productId} className='cart-item1'>
             <img 
-              src={item.image ? `http://localhost:4000/uploads/${item.image}` : item.designLink || 'https://via.placeholder.com/100x100?text=No+Image'} 
+              src={item.image ? `http://localhost:8080/uploads/${item.image}` : 'https://via.placeholder.com/100x100?text=No+Image'} 
               alt={item.name} 
               width="100" 
               onError={(e) => {

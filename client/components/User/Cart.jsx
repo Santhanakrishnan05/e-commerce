@@ -12,14 +12,14 @@ export default function Cart() {
   const safeProducts = products || []
 
   const productsInCart = safeProducts.filter(product => {
-    const productId = product._id || product.id
-    return safeCart.some(item => (item._id || item.id) === productId)
+    const productId = product.id
+    return safeCart.some(item => (item.id) === productId)
   })
 
   
   const handleCartTaggle = (item) => {  
-    const productId = item._id || item.id
-    const isCart = cart.some(item => (item._id || item.id) === productId)
+    const productId = item.id
+    const isCart = cart.some(item => (item.id) === productId)
     if (isCart) {
       // Remove from favorites
       removeFromCart(productId)
@@ -59,14 +59,14 @@ export default function Cart() {
       <h2>🛍️ Your Cart</h2>
       {productsInCart.map((item) => {
         // Get the cart item details
-        const productId = item._id || item.id
-        const cartItem = safeCart.find(cartItem => (cartItem._id || cartItem.id) === productId)
+        const productId = item.id
+        const cartItem = safeCart.find(cartItem => (cartItem.id) === productId)
         const quantity = cartItem ? cartItem.quantity : 1
         
         return (
           <div key={productId} className='cart-item1'>
             <img 
-              src={item.image ? `http://localhost:4000/uploads/${item.image}` : item.designLink || 'https://via.placeholder.com/100x100?text=No+Image'} 
+              src={item.image ? `http://localhost:8080/uploads/${item.image}` : 'https://via.placeholder.com/100x100?text=No+Image'} 
               alt={item.name} 
               width="100" 
               onError={(e) => {

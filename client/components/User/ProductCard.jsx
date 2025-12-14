@@ -24,7 +24,7 @@ export default function ProductCard({data}) {
   const isFav = fav.some(item => (item._id || item.id) === productId)
   
   // Use uploaded image if available, otherwise fall back to designLink
-  const imageSrc = image ? `http://localhost:4000/uploads/${image}` : designLink || '';
+  const imageSrc = image ? `http://localhost:8080/uploads/${image}` : '';
 
   const handleCartTaggle = () => {
     if (isCart) {

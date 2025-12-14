@@ -33,7 +33,7 @@ export default function ProductCheck() {
     );
   }
 
-  const imageSrc = data.image ? `http://localhost:4000/uploads/${data.image}` : data.designLink || '';
+  const imageSrc = data.image ? `http://localhost:8080/uploads/${data.image}` : '';
   
   // Handle navigation to order history after successful order
   useEffect(() => {
@@ -43,8 +43,8 @@ export default function ProductCheck() {
     }
   }, [direct, navigate, setDirect]);
   const handleFavToggle = () => {
-    const productId = data._id || data.id;
-    if (fav.some(item => (item._id || item.id) === productId)) {
+    const productId = data.id;
+    if (fav.some(item => (item.id) === productId)) {
       removeFromFavorites(productId);
     } else {
       addToFavorites(data);
@@ -52,8 +52,8 @@ export default function ProductCheck() {
   };
 
   const handleCartToggle = () => {
-    const productId = data._id || data.id;
-    if (cart.some(item => (item._id || item.id) === productId)) {
+    const productId = data.id;
+    if (cart.some(item => (item.id) === productId)) {
       removeFromCart(productId);
     } else {
       addToCart(data);
@@ -82,10 +82,10 @@ export default function ProductCheck() {
 
           <div className="buttons">
             <button onClick={handleFavToggle} className="fav">
-              {fav.some(item => (item._id || item.id) === (data._id || data.id)) ? "❤️ Fav" : "🤍 Fav"}
+              {fav.some(item => (item.id) === (data.id)) ? "❤️ Fav" : "🤍 Fav"}
             </button>
             <button onClick={handleCartToggle} className="remove">
-              {cart.some(item => (item._id || item.id) === (data._id || data.id)) ? '🗑️ Remove' : '🛒 Add to Cart'}
+              {cart.some(item => (item.id) === (data.id)) ? '🗑️ Remove' : '🛒 Add to Cart'}
             </button>
           </div>
         </div>

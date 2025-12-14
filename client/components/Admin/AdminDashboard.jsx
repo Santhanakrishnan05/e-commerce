@@ -20,7 +20,7 @@ export default function AdminDashboard(props) {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/orders')
+      const response = await axios.get('http://localhost:8080/orders')
       setOrderAdmin(response.data || [])
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -30,7 +30,7 @@ export default function AdminDashboard(props) {
 
   const fetchCustomRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/orders/custom-requests')
+      const response = await axios.get('http://localhost:8080/orders/custom-requests')
       setOrderRequestAdmin(response.data || [])
     } catch (error) {
       console.error('Error fetching custom requests:', error)
@@ -40,7 +40,7 @@ export default function AdminDashboard(props) {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/users')
+      const response = await axios.get('http://localhost:8080/users')
       setUsers(response.data || [])
     } catch (error) {
       console.error('Error fetching users:', error)

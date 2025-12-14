@@ -38,27 +38,36 @@ const UpdateProduct = ({ product, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const updatedData = new FormData();
-      if (file) updatedData.append('file', file);
-      Object.keys(formData).forEach(key => {
-        updatedData.append(key, formData[key]);
-      });
+  e.preventDefault();
+  try {
+    const updatedData = new FormData();
+    // append file under the same name backend expects: "image"
+    if (file) updatedData.append('image', file);
 
-      const res = await axios.put(
-        `http://localhost:4000/api/products/${product._id}`,
-        updatedData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
+    // append only non-empty fields so partial updates work
+    Object.keys(formData).forEach(key => {
+      const value = formData[key];
+      if (value !== undefined && value !== null && String(value).length > 0) {
+        updatedData.append(key, value);
+      }
+    });
 
-      setMessage('Product updated successfully');
-      if (onSuccess) onSuccess(res.data); // call parent to update products
-    } catch (err) {
-      console.error(err);
-      setMessage('Error updating product');
+    // Debug: list form entries (open console to inspect)
+    for (let pair of updatedData.entries()) {
+      console.log(pair[0], pair[1]);
     }
-  };
+
+    // DO NOT set Content-Type; let browser set boundary
+    const res = await axios.put(`/products/${product.id}`, updatedData);
+
+    setMessage('Product updated successfully');
+    if (onSuccess) onSuccess(res.data); 
+    //if (onSuccess) onSuccess(res.data.product ?? res.data);
+  } catch (err) {
+    console.error('Update error:', err, err?.response?.data);
+    setMessage('Error updating product');
+  }
+};
 
   return (
     <div className="update-product-form">

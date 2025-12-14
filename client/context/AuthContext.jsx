@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/products');
+                const response = await axios.get('http://localhost:8080/products');
                 setProducts(Array.isArray(response.data) ? response.data : []);
             } catch (err) {
                 setProducts([]);
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
 
-            const response = await axios.get('http://localhost:4000/api/auth/me', {
+            const response = await axios.get('http://localhost:8080/auth/me', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             setError(null);
-            const response = await axios.post('http://localhost:4000/api/auth/login', {
+            const response = await axios.post('http://localhost:8080/auth/login', {
                 email,
                 password
             });
@@ -90,11 +90,11 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (username, email, password, address) => {
+    const register = async (userName, email, password, address) => {
         try {
             setError(null);
-            const response = await axios.post('http://localhost:4000/api/auth/register', {
-                username,
+            const response = await axios.post('http://localhost:8080/auth/register', {
+                userName,
                 email,
                 password,
                 address
@@ -154,7 +154,7 @@ export const AuthProvider = ({ children }) => {
             const orderData = {
                 productId: productData._id || productData.id,
                 userId: user._id || user.userId,
-                username: user.username,
+                userName: user.userName,
                 email: user.email,
                 address: user.address || 'Not provided',
                 clothType: orderFormData.clothType || productData.name,
@@ -162,7 +162,7 @@ export const AuthProvider = ({ children }) => {
                 size: orderFormData.size,
                 quantity: parseInt(orderFormData.quantity),
                 designLink: productData.image
-                    ? `http://localhost:4000/uploads/${productData.image.split('/').pop()}`
+                    ? `http://localhost:8080/uploads/${productData.image.split('/').pop()}`
                     : (productData.designLink || ''),
                 image: productData.image ? productData.image.split('/').pop() : '',
                 amount: (productData.discountPrice || productData.originalPrice) * parseInt(orderFormData.quantity),
@@ -172,7 +172,7 @@ export const AuthProvider = ({ children }) => {
                 payment: 'paid'
             };
 
-            const response = await axios.post('http://localhost:4000/api/orders', orderData, {
+            const response = await axios.post('http://localhost:8080/orders', orderData, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
 

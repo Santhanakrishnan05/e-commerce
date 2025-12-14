@@ -7,7 +7,7 @@ export default function SignUp() {
   const [message, setMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
-    username: "",
+    userName: "",
     email: "",
     password: "",
     address: ""
@@ -26,7 +26,7 @@ export default function SignUp() {
 
     try {
       const result = await register(
-        formData.username,
+        formData.userName,
         formData.email,
         formData.password,
         formData.address
@@ -52,12 +52,12 @@ export default function SignUp() {
     <div className="SignInContainer">
       <form className="SignInForm" onSubmit={handleFormSubmit}>
         <div className="formData">
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="userName">UserName:</label>
           <input
             type="text"
-            id="username"
-            name="username"
-            value={formData.username}
+            id="userName"
+            name="userName"
+            value={formData.userName}
             onChange={handleFormChange}
             required
           />

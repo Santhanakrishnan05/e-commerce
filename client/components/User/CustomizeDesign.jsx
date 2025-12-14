@@ -46,14 +46,14 @@ function CustomizeDesign() {
       requestData.append('color', customData.color)
       requestData.append('size', customData.size)
       requestData.append('quantity', customData.quantity)
-      requestData.append('userId', user._id || user.userId)
-      requestData.append('username', user.username)
+      requestData.append('userId', user.userId)
+      requestData.append('userName', user.userName)
       requestData.append('email', user.email)
       requestData.append('address', user.address)
       requestData.append('status', 'pending')
       requestData.append('amount', '0') // Will be set by admin
 
-      const response = await axios.post('http://localhost:4000/api/orders/custom-requests', requestData, {
+      const response = await axios.post('http://localhost:8080/orders/custom-requests', requestData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       

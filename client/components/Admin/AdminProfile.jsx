@@ -7,7 +7,7 @@ export default function AdminProfile({ onUpdate, message, setMessage }) {
   const navigate = useNavigate()
   const [showEditForm, setShowEditForm] = useState(false)
   const [editData, setEditData] = useState({
-    username: '',
+    userName: '',
     email: '',
     password: '',
     address: ''
@@ -32,7 +32,7 @@ export default function AdminProfile({ onUpdate, message, setMessage }) {
 
   const handleEditClick = () => {
     setEditData({
-      username: user?.username || '',
+      userName: user?.userName || '',
       email: user?.email || '',
       password: '',
       address: user?.address || ''
@@ -68,7 +68,7 @@ export default function AdminProfile({ onUpdate, message, setMessage }) {
         setShowEditForm(false)
         // Clear the form
         setEditData({
-          username: '',
+          userName: '',
           email: '',
           password: '',
           address: ''
@@ -83,7 +83,7 @@ export default function AdminProfile({ onUpdate, message, setMessage }) {
   const handleCloseForm = () => {
     setShowEditForm(false)
     setEditData({
-      username: '',
+      userName: '',
       email: '',
       password: '',
       address: ''
@@ -97,7 +97,7 @@ export default function AdminProfile({ onUpdate, message, setMessage }) {
     <div className="profile-container">
       <div className="profile-card">
         <h2>{user.role === 'admin' ? 'Admin Profile' : 'User Profile'}</h2>
-        <div className="profile-detail"><strong>Username:</strong> {user.username}</div>
+        <div className="profile-detail"><strong>UserName:</strong> {user.userName}</div>
         <div className="profile-detail"><strong>Email:</strong> {user.email}</div>
         <div className="profile-detail"><strong>Address:</strong> {user.address}</div>
         <div className="profile-detail"><strong>Role:</strong> {user.role}</div>
@@ -129,11 +129,11 @@ export default function AdminProfile({ onUpdate, message, setMessage }) {
             )}
             
             <div className="form-group">
-              <label htmlFor="username">Name</label>
+              <label htmlFor="userName">Name</label>
               <input 
                 type="text" 
-                name='username' 
-                value={editData.username} 
+                name='userName' 
+                value={editData.userName} 
                 onChange={handleEditChange}
                 required
               />

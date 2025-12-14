@@ -8,7 +8,7 @@ export default function Profile(props) {
   const navigate = useNavigate()
   const [pop, setPop] = useState(false)
   const [popData, setPopData] = useState({
-    username: '',
+    userName: '',
     email: '',
     password: '',
     address: ''
@@ -21,7 +21,7 @@ export default function Profile(props) {
 
   const handleUpdate = (userData) => {
     setPopData({
-      username: userData.username || '',
+      userName: userData.userName || '',
       email: userData.email || '',
       password: '',
       address: userData.address || ''
@@ -55,7 +55,7 @@ export default function Profile(props) {
       await onUpdate(userId, popData)
       setPop(false)
       setPopData({
-        username: '',
+        userName: '',
         email: '',
         password: '',
         address: ''
@@ -72,7 +72,7 @@ export default function Profile(props) {
     <div className="profile-container">
       <div className="profile-card">
         <h2>{user.role === 'admin' ? 'Admin Profile' : 'User Profile'}</h2>
-        <div className="profile-detail"><strong>Username:</strong> {user.username}</div>
+        <div className="profile-detail"><strong>UserName:</strong> {user.userName}</div>
         <div className="profile-detail"><strong>Email:</strong> {user.email}</div>
         <div className="profile-detail"><strong>Address:</strong> {user.address}</div>
       </div>
@@ -92,11 +92,11 @@ export default function Profile(props) {
             )}
             
             <div className="form-group">
-              <label htmlFor="username">Name</label>
+              <label htmlFor="userName">Name</label>
               <input 
                 type="text" 
-                name='username' 
-                value={popData.username} 
+                name='userName' 
+                value={popData.userName} 
                 onChange={handlePopChange} 
                 required 
               />

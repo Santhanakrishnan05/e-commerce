@@ -14,7 +14,7 @@ export default function UserManager() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/users')
+      const response = await axios.get('http://localhost:8080/users')
       setUsers(response.data || [])
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -26,7 +26,7 @@ export default function UserManager() {
 
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/users/${id}`)
+      await axios.delete(`http://localhost:8080/users/${id}`)
       console.log("Successfully deleted")
       fetchUsers() // Refresh the users list
     } catch (err) {
@@ -60,17 +60,17 @@ export default function UserManager() {
           <tbody>
           {Array.isArray(users) && users.length > 0 ? (
             users.map((item) => (
-              <tr key={item._id || item.userId}>
-                <td>{item._id || item.userId}</td>
-                <td>{item.username}</td>
+              <tr key={item.id || item.userId}>
+                <td>{item.id || item.userId}</td>
+                <td>{item.userName}</td>
                 <td>{item.email}</td>
                 <td>........</td>
                 <td>{item.address}</td>
                 <td>{item.role || 'user'}</td>
                 <td>
                   <button 
-                    disabled={!isAdmin || (item._id === currentUser?._id)} 
-                    onClick={() => handleDeleteUser(item._id || item.id)}
+                    disabled={!isAdmin || (item.id === currentUser?.id)} 
+                    onClick={() => handleDeleteUser(item.id)}
                   >
                     Delete
                   </button>

@@ -45,11 +45,8 @@ const AddProduct = ({ onClose, onSuccess }) => {
       productData.append('size', formData.size); // Comma-separated
       productData.append('colorsAvailable', formData.colorsAvailable); // Comma-separated
       productData.append('quantity', formData.quantity);
-      productData.append('designLink', formData.designLink);
 
-      const res = await axios.post('http://localhost:4000/api/products', productData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const res = await axios.post('/products', productData);
 
       setMessage('Product added successfully!');
       
@@ -67,8 +64,7 @@ const AddProduct = ({ onClose, onSuccess }) => {
         description: '',
         size: '',
         colorsAvailable: '',
-        quantity: '',
-        designLink: ''
+        quantity: ''
       });
       setFile(null);
       
@@ -195,17 +191,6 @@ const AddProduct = ({ onClose, onSuccess }) => {
             onChange={handleChange} 
             required 
             min="0" 
-          />
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="designLink">Design Link (optional)</label>
-          <input 
-            type="text" 
-            name="designLink" 
-            id="designLink"
-            value={formData.designLink} 
-            onChange={handleChange} 
           />
         </div>
         

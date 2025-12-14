@@ -14,8 +14,8 @@ export default function ProductManager() {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
 
     try {
-      await axios.delete(`http://localhost:4000/api/products/${id}`);
-      setProducts((prev) => prev.filter((p) => p._id !== id));
+      await axios.delete(`http://localhost:8080/products/${id}`);
+      setProducts((prev) => prev.filter((p) => p.id !== id));
       console.log('Product deleted successfully');
     } catch (err) {
       console.error('Error deleting product', err);
@@ -35,7 +35,7 @@ export default function ProductManager() {
 
   const handleUpdateSuccess = (updatedProduct) => {
     setProducts(prev =>
-      prev.map(p => p._id === updatedProduct._id ? updatedProduct : p)
+      prev.map(p => p.id === updatedProduct.id ? updatedProduct : p)
     );
     handleCloseUpdateModal();
   };
@@ -57,11 +57,11 @@ export default function ProductManager() {
           <tbody>
           {Array.isArray(products) && products.length > 0 ? (
             products.map((item, index)=> (
-              <tr key={item._id || index}>
+              <tr key={item.id || index}>
                 <td>{item.name}</td>
                 <td>
                   <img 
-                    src={`http://localhost:4000/uploads/${item.image}`} 
+                    src={`http://localhost:8080/uploads/${item.image}`} 
                     alt={item.name} 
                     style={{ width: '60px', height: '60px', objectFit: 'cover' }} 
                   />
@@ -74,7 +74,7 @@ export default function ProductManager() {
                 <td>{Array.isArray(item.colorsAvailable) ? item.colorsAvailable.join(', ') : item.colorsAvailable}</td>
                 <td>
                   <button onClick={() => handleEditProduct(item)}>Edit</button>
-                  <button onClick={() => handleDeleteProduct(item._id || item.id)}>Delete</button>
+                  <button onClick={() => handleDeleteProduct(item.id)}>Delete</button>
                 </td>
               </tr>
             ))
