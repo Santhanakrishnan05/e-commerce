@@ -1,23 +1,23 @@
 # E-Commerce Project
 
-A full-stack e-commerce application built with React frontend and Node.js/Express backend with MongoDB database.
+A full-stack e-commerce application built with React frontend and Spring Boot backend with MySQL database.
 
 ## Features
 
 ### User Features
-- User registration and authentication
+- User registration and authentication (JWT based)
 - Product browsing and search
 - Shopping cart management
-- Favorites/wishlist
+- Favorites / wishlist
 - Custom design requests
-- Order history
+- Order history (normal & customized)
 - User profile management
 
 ### Admin Features
-- Product management (CRUD operations)
+- Product management (Create, Update, Delete)
 - User management
 - Order management
-- Custom request management
+- Custom design request approval & pricing
 - Admin dashboard
 
 ## Tech Stack
@@ -30,147 +30,177 @@ A full-stack e-commerce application built with React frontend and Node.js/Expres
 - CSS for styling
 
 ### Backend
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT authentication
-- Multer for file uploads
-- Bcrypt for password hashing
+- Java Spring Boot
+- Spring Web (REST APIs)
+- Spring Data JPA
+- Spring Security (JWT Authentication)
+- MySQL Database
+- Hibernate ORM
+- Multipart file upload
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```
 e-commerce/
-├── client/                 # React frontend
-│   ├── components/        # React components
-│   ├── context/          # Context providers
-│   ├── Auth/             # Authentication components
-│   ├── styles/           # CSS files
-│   └── pages/            # Main app component
-├── Backend/              # Node.js backend
-│   ├── models/           # MongoDB schemas
-│   ├── routes/           # API routes
-│   ├── uploads/          # File uploads
-│   └── config.env        # Environment variables
-└── README.md
+├── client/                      # React frontend
+│   ├── components/              # Reusable UI components
+│   ├── context/                 # Context providers (Auth, Cart)
+│   ├── pages/                   # Pages (Home, Orders, Admin, etc.)
+│   ├── styles/                  # CSS files
+│   └── main.jsx                 # App entry point
+│
+└── E-CommerceBackEnd/           # Spring Boot backend
+    ├── config/                  # Security & Web config
+    ├── controller/              # REST controllers
+    ├── dto/                     # Request & Response DTOs
+    ├── model/                   # JPA entities
+    ├── repository/              # JPA repositories
+    ├── service/                 # Business logic
+    ├── uploads/                 # Uploaded images
+    └── application.properties   # Backend configuration
 ```
 
-## Setup Instructions
+## ⚙️ Setup Instructions
 
-### Prerequisites
-- Node.js (v16 or higher)
-- MongoDB installed and running locally
+### ✅ Prerequisites
+- Java 17 or higher
+- Maven
+- MySQL (running locally)
+- Node.js (v16+)
 - Git
 
-### Backend Setup
+### 🔧 Backend Setup (Spring Boot)
 
 1. Navigate to the backend directory:
    ```bash
-   cd Backend
+   cd E-CommerceBackEnd
    ```
+2. Configure `application.properties`:
 
-2. Install dependencies:
-   ```bash
-   npm install
+   ```properties
+   server.port=8080
+
+   spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce_db
+   spring.datasource.username=root
+   spring.datasource.password=yourpassword
+
+   spring.jpa.hibernate.ddl-auto=update
+   spring.jpa.show-sql=true
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+   jwt.secret=your-super-secret-jwt-key
+
    ```
+3. Create the database in `MySQL`:
 
-3. Create a `.env` file in the Backend directory with the following content:
-   ```
-   PORT=4000
-   MONGODB_URI=mongodb://localhost:27017/e-commerce-data
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-   NODE_ENV=development
-   ```
+```SQL
+CREATE DATABASE ecommerce_db;
+```
 
-4. Start MongoDB service on your machine
+4. Run the Spring Boot application:
 
-5. Start the backend server:
-   ```bash
-   npm start
-   ```
+```Bash
+mvn spring-boot:run
+```
+✅ Backend runs at: http://localhost:8080
 
-   The backend will run on `http://localhost:4000`
+## 🎨 Frontend Setup (React)
+### Navigate to the frontend directory:
 
-### Frontend Setup
+```Bash
+cd client
+```
 
-1. Navigate to the client directory:
-   ```bash
-   cd client
-   ```
+### Install dependencies:
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```Bash
+npm install
+```
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+### Start the development server:
 
-   The frontend will run on `http://localhost:5173`
+```Bash
+npm run dev
+```
+✅ Frontend runs at: http://localhost:5173
 
-## API Endpoints
+## 🔗 API Endpoints
 
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
+### 🔐 Authentication
+- `POST /auth/register` – Register user
+- `POST /auth/login` – Login user
+- `GET /auth/me` – Get logged-in user
 
-### Products
-- `GET /api/products` - Get all products
-- `GET /api/products/:id` - Get product by ID
-- `POST /api/products` - Create new product (admin)
-- `PUT /api/products/:id` - Update product (admin)
-- `DELETE /api/products/:id` - Delete product (admin)
+### 📦 Products
+- `GET /products` – Get all products
+- `GET /products/{id}` – Get product by ID
+- `POST /products` – Create product (admin)
+- `PUT /products/{id}` – Update product (admin)
+- `DELETE /products/{id}` – Delete product (admin)
 
-### Users
-- `GET /api/users` - Get all users (admin)
-- `GET /api/users/:id` - Get user by ID
-- `PUT /api/users/:id` - Update user
-- `DELETE /api/users/:id` - Delete user (admin)
+### 👥 Users
+- `GET /users` – Get all users (admin)
+- `GET /users/{id}` – Get user by ID
+- `PUT /users/{id}` – Update user profile
+- `DELETE /users/{id}` – Delete user (admin)
 
-### Orders
-- `GET /api/orders` - Get all orders (admin)
-- `GET /api/orders/user/:userId` - Get user orders
-- `POST /api/orders` - Create new order
-- `PUT /api/orders/:id` - Update order status
+### 🧾 Orders
+- `GET /orders` – Get all orders (admin)
+- `GET /orders/user/{userId}` – Get user orders
+- `POST /orders` – Create new order
+- `PUT /orders/{id}` – Update order status
 
-### Custom Requests
-- `GET /api/orders/custom-requests` - Get all custom requests (admin)
-- `GET /api/orders/custom-requests/user/:userId` - Get user custom requests
-- `POST /api/orders/custom-requests` - Create custom request
-- `PUT /api/orders/custom-requests/:id` - Update custom request status
+### 🎨 Custom Design Requests
+- `GET /orders/custom-requests` – Get all custom requests (admin)
+- `GET /orders/custom-requests/user/{userId}` – Get user custom requests
+- `POST /orders/custom-requests` – Create custom request
+- `PUT /orders/custom-requests/{id}` – Update custom request (admin)
 
-## Database Models
+## 🗄️ Database Models (JPA Entities)
 
 ### User
-- username, email, password, address, role, isActive
+- `id`, `userName`, `email`, `password`, `address`, `role`, `joinedAt`
 
 ### Product
-- name, originalPrice, discountPrice, image, category, description, size, colorsAvailable, quantity, designLink
+- `id`, `name`, `originalPrice`, `discountPrice`, `category`, `description`, `size`, `colorsAvailable`, `quantity`, `image`, `createdAt`
 
 ### Order
-- productId, payment, userId, username, email, address, clothType, color, size, quantity, amount, status, type
+- `id`, `productId`, `userId`, `userName`, `email`, `address`, `clothType`, `color`, `size`, `quantity`, `amount`, `payment`, `status`, `type`, `createdAt`
 
 ### CustomRequest
-- userId, username, email, address, clothType, color, size, quantity, designLink, status
+- `id`, `userId`, `image`, `color`, `size`, `quantity`, `status`, `type`, `estimatedCost`, `createdAt`
 
-## Usage
+## ▶️ Usage
 
-1. Start both backend and frontend servers
-2. Open `http://localhost:5173` in your browser
-3. Register a new account or login
-4. Browse products, add to cart, and place orders
-5. For admin access, change user role to 'admin' in the database
+1. Start MySQL, Backend, and Frontend.
+2. Open `http://localhost:5173`.
+3. Register or login.
+4. Browse products and place orders.
+5. Submit custom design requests.
+6. Admin can approve & set price for custom requests.
+7. User converts approved custom request into an order.
 
-## Contributing
+## 👑 Admin Access
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+To make a user admin, run the following SQL command:
 
-## License
+```sql
+UPDATE users SET role = 'admin' WHERE id = 1;
+```
 
-This project is open source and available under the [MIT License](LICENSE).
+## 🤝 Contributing
+- Fork the repository
+
+- Create a new branch
+
+- Make changes
+
+- Submit a pull request
+
+## 📜 License
+- This project is open-source and available under the MIT License.
+
+
+   
