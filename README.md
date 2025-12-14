@@ -95,30 +95,35 @@ e-commerce/
    ```
 3. Create the database in `MySQL`:
 
-``` `SQL`
-CREATE DATABASE ecommerce_db;```
+```SQL
+CREATE DATABASE ecommerce_db;
+```
 
 4. Run the Spring Boot application:
 
-``` `Bash`
-mvn spring-boot:run```
+```Bash
+mvn spring-boot:run
+```
 ✅ Backend runs at: http://localhost:8080
 
 ## 🎨 Frontend Setup (React)
 ### Navigate to the frontend directory:
 
-``` `Bash`
-cd client```
+```Bash
+cd client
+```
 
 ### Install dependencies:
 
-``` `Bash`
-npm install ```
+```Bash
+npm install
+```
 
 ### Start the development server:
 
-``` `Bash`
-npm run dev ```
+```Bash
+npm run dev
+```
 ✅ Frontend runs at: http://localhost:5173
 
 ## 🔗 API Endpoints
@@ -181,8 +186,9 @@ npm run dev ```
 
 To make a user admin, run the following SQL command:
 
-``` `sql`
-UPDATE users SET role = 'admin' WHERE id = 1; ```
+```sql
+UPDATE users SET role = 'admin' WHERE id = 1;
+```
 
 ## 🤝 Contributing
 - Fork the repository
